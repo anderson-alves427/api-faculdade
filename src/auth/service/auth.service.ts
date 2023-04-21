@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ProfessorRepository } from 'src/professor/repository/professor.repository';
 import { SignInProfessorDTO } from '../dto/sign-in-professor.dto';
 import { JwtService } from '@nestjs/jwt';
+import { ResponseSignInProfessorDTO } from '../dto/response-sign-in-professor.dto';
 
 @Injectable()
 export class AuthService {
@@ -10,7 +11,10 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signInProfessor({ usuario, senha }: SignInProfessorDTO): Promise<any> {
+  async signInProfessor({
+    usuario,
+    senha,
+  }: SignInProfessorDTO): Promise<ResponseSignInProfessorDTO> {
     try {
       const user = await this.professorRepository.findOneBy({ usuario });
       if (!user) {
@@ -28,7 +32,7 @@ export class AuthService {
       }
       const payload = { username: user.email, sub: user.id };
       return {
-        access_token: await this.jwtService.signAsync(payload),
+        token: await this.jwtService.signAsync(payload),
       };
     } catch (error) {
       if (error instanceof HttpException) throw error;
