@@ -8,6 +8,7 @@ import { SignInProfessorDTO } from '../dto/sign-in-professor.dto';
 import { AuthService } from './../service/auth.service';
 import { Body, Controller, Post } from '@nestjs/common';
 import { ResponseSignInProfessorDTO } from '../dto/response-sign-in-professor.dto';
+import { ResponseSignInAlunoDTO } from '../dto/response-sign-in-aluno.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -36,5 +37,29 @@ export class AuthController {
     @Body() dto: SignInProfessorDTO,
   ): Promise<ResponseSignInProfessorDTO> {
     return await this.authService.signInProfessor(dto);
+  }
+
+  @Post('login-aluno')
+  @ApiOperation({ description: 'Realiza login do aluno' })
+  @ApiCreatedResponse({
+    description: 'Token de acesso',
+    type: ResponseSignInProfessorDTO,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Usuário não encontrado.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Usuário ou senha inválida',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Ocorreu um erro ao fazer o login',
+  })
+  async signInAluno(
+    @Body() dto: SignInProfessorDTO,
+  ): Promise<ResponseSignInAlunoDTO> {
+    return await this.authService.signInAluno(dto);
   }
 }
