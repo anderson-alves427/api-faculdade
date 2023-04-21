@@ -12,5 +12,11 @@ export class ProfessorEntity {
   data: Date;
 
   @Column()
+  usuario: string;
+
+  @Column()
   email: string;
+
+  @Column()
+  senha: string;
 }

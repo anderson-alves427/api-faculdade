@@ -10,9 +10,9 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signInProfessor({ email }: SignInProfessorDTO): Promise<any> {
+  async signInProfessor({ usuario, senha }: SignInProfessorDTO): Promise<any> {
     try {
-      const user = await this.professorRepository.findOneBy({ email });
+      const user = await this.professorRepository.findOneBy({ usuario });
       if (!user) {
         throw new HttpException(
           'Usuário não encontrado.',
@@ -20,6 +20,12 @@ export class AuthService {
         );
       }
 
+      if (user.senha !== senha) {
+        throw new HttpException(
+          'Usuário ou senha inválida',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
       const payload = { username: user.email, sub: user.id };
       return {
         access_token: await this.jwtService.signAsync(payload),

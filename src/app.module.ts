@@ -16,7 +16,6 @@ import { AuthModule } from './auth/auth.module';
       password: '1234',
       database: 'faculdadetst',
       entities: [ProfessorEntity],
-      synchronize: true,
     }),
     ProfessorModule,
     AuthModule,
